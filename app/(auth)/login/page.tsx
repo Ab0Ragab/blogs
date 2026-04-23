@@ -17,6 +17,8 @@ export default function LoginPage() {
   const [isPending, startTransition] = useTransition();
   const { setAuth } = useAuth();
   const router = useRouter();
+  const searchParams = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>();
 
   function onSubmit({ email, password }: LoginForm) {
@@ -25,7 +27,8 @@ export default function LoginPage() {
       try {
         const { token } = await login(email, password);
         await setAuth(email, token);
-        router.push("/");
+        router.push(callbackUrl);
+        router.refresh();
       } catch (err: unknown) {
         setError(err instanceof Error ? err.message : "Login failed");
       }

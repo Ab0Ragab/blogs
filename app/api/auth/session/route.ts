@@ -4,7 +4,7 @@ import { AUTH_TOKEN_COOKIE } from "@/lib/constants/auth";
 
 const COOKIE = AUTH_TOKEN_COOKIE;
 const MAX_AGE = 7 * 86400;
-const OPTS = { httpOnly: true, secure: true, sameSite: "strict" as const, path: "/" };
+const OPTS = { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" as const, path: "/" };
 
 export async function POST(req: Request) {
   const { token } = await req.json();
