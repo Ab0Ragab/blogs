@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { login } from "@/lib/auth";
@@ -17,7 +17,7 @@ export default function LoginPage() {
   const [isPending, startTransition] = useTransition();
   const { setAuth } = useAuth();
   const router = useRouter();
-  const searchParams = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+  const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>();
 

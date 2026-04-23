@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { AUTH_TOKEN_COOKIE } from "./lib/constants/auth";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const authToken = request.cookies.get(AUTH_TOKEN_COOKIE)?.value;
   const isProtectedRoute = path.startsWith("/blog");
