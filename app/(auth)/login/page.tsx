@@ -27,8 +27,7 @@ export default function LoginPage() {
       try {
         const { token } = await login(email, password);
         await setAuth(email, token);
-        router.push(callbackUrl);
-        router.refresh();
+        window.location.href = callbackUrl;
       } catch (err: unknown) {
         setError(err instanceof Error ? err.message : "Login failed");
       }
