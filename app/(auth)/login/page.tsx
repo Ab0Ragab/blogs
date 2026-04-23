@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -12,7 +12,7 @@ interface LoginForm {
   password: string;
 }
 
-export default function LoginPage() {
+function LoginForm() {
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
   const { setAuth } = useAuth();
@@ -92,5 +92,13 @@ export default function LoginPage() {
         </Link>
       </p>
     </>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }
