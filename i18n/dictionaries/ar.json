@@ -1,0 +1,55 @@
+{
+  "home": {
+    "title": "مرحباً",
+    "subtitle": "اكتشف القصص والأفكار والرؤى على مدونتنا.",
+    "cta": "اذهب إلى المدونة ←"
+  },
+  "header": {
+    "brand": "مدونتنا",
+    "home": "الرئيسية",
+    "blog": "المدونة",
+    "login": "تسجيل الدخول",
+    "signup": "إنشاء حساب",
+    "logout": "تسجيل الخروج",
+    "toggleDark": "تبديل الوضع الداكن"
+  },
+  "footer": {
+    "copyright": "© {year} مدونتنا",
+    "home": "الرئيسية",
+    "blog": "المدونة"
+  },
+  "blog": {
+    "latestPosts": "أحدث المقالات",
+    "noPosts": "لم يتم العثور على مقالات.",
+    "searchPlaceholder": "ابحث في المقالات...",
+    "clear": "✕ مسح",
+    "prev": "→ السابق",
+    "next": "التالي ←",
+    "backToAll": "→ العودة لجميع المقالات",
+    "noContent": "هذا المقال لا يحتوي على محتوى بعد. تحقق لاحقاً!",
+    "by": "بواسطة"
+  },
+  "preferences": {
+    "title": "تفضيلاتك",
+    "theme": "المظهر"
+  },
+  "auth": {
+    "loginTitle": "تسجيل الدخول",
+    "signupTitle": "إنشاء حساب",
+    "emailPlaceholder": "البريد الإلكتروني",
+    "usernamePlaceholder": "اسم المستخدم",
+    "passwordPlaceholder": "كلمة المرور",
+    "loginButton": "تسجيل الدخول",
+    "signupButton": "إنشاء حساب",
+    "noAccount": "ليس لديك حساب؟",
+    "hasAccount": "لديك حساب بالفعل؟",
+    "hint": "جرّب: emilys / emilyspass",
+    "usernameRequired": "اسم المستخدم مطلوب",
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "invalidEmail": "بريد إلكتروني غير صالح",
+    "minChars": "الحد الأدنى {count} أحرف",
+    "loginFailed": "فشل تسجيل الدخول",
+    "signupFailed": "فشل إنشاء الحساب"
+  }
+}

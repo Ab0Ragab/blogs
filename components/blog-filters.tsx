@@ -2,6 +2,7 @@
 
 import { Suspense, useDeferredValue, useEffect, useState } from "react";
 import useFilterNav from "@/lib/use-filter-nav";
+import { useI18n } from "@/i18n/context";
 
 export default function BlogFilters() {
   return (
@@ -16,6 +17,7 @@ const inputClass =
 
 function Filters() {
   const { searchParams, isPending, navigate, clear } = useFilterNav();
+  const { dict } = useI18n();
 
   const search = searchParams.get("search") ?? "";
   const dateFrom = searchParams.get("from") ?? "";
@@ -36,7 +38,7 @@ function Filters() {
       <div className="flex flex-wrap gap-3">
         <input
           type="text"
-          placeholder="Search posts..."
+          placeholder={dict.blog.searchPlaceholder}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className={`flex-1 min-w-50 ${inputClass} placeholder:text-slate-400`}
@@ -48,7 +50,7 @@ function Filters() {
             onClick={() => { setQuery(""); clear(); }}
             className={`${inputClass} cursor-pointer text-slate-500 hover:text-red-500 dark:hover:text-red-400 hover:border-red-300 dark:hover:border-red-500 transition-colors`}
           >
-            ✕ Clear
+            {dict.blog.clear}
           </button>
         )}
       </div>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { login } from "@/lib/auth";
 import { useAuth } from "@/lib/auth-context";
+import { useI18n } from "@/i18n/context";
 
 interface LoginForm {
   email: string;
@@ -16,8 +17,9 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
   const { setAuth } = useAuth();
+  const { dict, lang } = useI18n();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const callbackUrl = searchParams.get("callbackUrl") || `/${lang}`;
   const {
     register,
     handleSubmit,
@@ -32,23 +34,23 @@ function LoginForm() {
         await setAuth(email, token);
         window.location.href = callbackUrl;
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : "Login failed");
+        setError(err instanceof Error ? err.message : dict.auth.loginFailed);
       }
     });
   }
 
   return (
     <>
-      <h1 className="text-2xl font-bold mb-6 text-center">Log In</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center">{dict.auth.loginTitle}</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <input
             {...register("email", {
-              required: "Username is required",
-              minLength: { value: 3, message: "Min 3 characters" },
+              required: dict.auth.usernameRequired,
+              minLength: { value: 3, message: dict.auth.minChars.replace("{count}", "3") },
             })}
             type="text"
-            placeholder="Username"
+            placeholder={dict.auth.usernamePlaceholder}
             className="w-full rounded border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900"
           />
           {errors.email && (
@@ -58,11 +60,11 @@ function LoginForm() {
         <div>
           <input
             {...register("password", {
-              required: "Password is required",
-              minLength: { value: 6, message: "Min 6 characters" },
+              required: dict.auth.passwordRequired,
+              minLength: { value: 6, message: dict.auth.minChars.replace("{count}", "6") },
             })}
             type="password"
-            placeholder="Password"
+            placeholder={dict.auth.passwordPlaceholder}
             className="w-full rounded border border-gray-300 px-3 py-2 dark:border-gray-700 dark:bg-gray-900"
           />
           {errors.password && (
@@ -71,7 +73,7 @@ function LoginForm() {
             </p>
           )}
         </div>
-        <p className="text-xs text-slate-400">Try: emilys / emilyspass</p>
+        <p className="text-xs text-slate-400">{dict.auth.hint}</p>
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <button
           type="submit"
@@ -81,14 +83,14 @@ function LoginForm() {
           {isPending ? (
             <span className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-background border-t-transparent" />
           ) : (
-            "Log In"
+            dict.auth.loginButton
           )}
         </button>
       </form>
       <p className="mt-4 text-center text-sm">
-        Don&apos;t have an account?{" "}
-        <Link href="/signup" className="underline">
-          Sign up
+        {dict.auth.noAccount}{" "}
+        <Link href={`/${lang}/signup`} className="underline">
+          {dict.header.signup}
         </Link>
       </p>
     </>

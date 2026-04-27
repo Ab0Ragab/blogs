@@ -3,6 +3,7 @@
 import { Suspense } from "react";
 import useFilterNav from "@/lib/use-filter-nav";
 import { LoadingBar } from "@/components/blog-filters";
+import { useI18n } from "@/i18n/context";
 
 const POSTS_PER_PAGE = 5;
 
@@ -16,6 +17,7 @@ export default function BlogPagination({ totalPosts }: { totalPosts: number }) {
 
 function Pagination({ totalPosts }: { totalPosts: number }) {
   const { searchParams, isPending, navigate } = useFilterNav();
+  const { dict } = useI18n();
 
   const page = Number(searchParams.get("page") ?? "1");
   const totalPages = Math.max(1, Math.ceil(totalPosts / POSTS_PER_PAGE));
@@ -28,13 +30,13 @@ function Pagination({ totalPosts }: { totalPosts: number }) {
   return (
     <div className="relative flex items-center justify-center gap-2 pt-2">
       <button disabled={isPending || page <= 1} onClick={() => navigate({ page: String(page - 1) }, false)} className={btnClass}>
-        ← Prev
+        {dict.blog.prev}
       </button>
       <span className="text-sm text-slate-500 dark:text-slate-400">
         {page} / {totalPages}
       </span>
       <button disabled={isPending || page >= totalPages} onClick={() => navigate({ page: String(page + 1) }, false)} className={btnClass}>
-        Next →
+        {dict.blog.next}
       </button>
       {isPending && <LoadingBar />}
     </div>

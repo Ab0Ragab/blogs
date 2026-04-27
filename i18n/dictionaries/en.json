@@ -1,0 +1,55 @@
+{
+  "home": {
+    "title": "Welcome",
+    "subtitle": "Discover stories, ideas, and insights on our blog.",
+    "cta": "Go to Blog →"
+  },
+  "header": {
+    "brand": "Our Blog",
+    "home": "Home",
+    "blog": "Blog",
+    "login": "Log in",
+    "signup": "Sign up",
+    "logout": "Logout",
+    "toggleDark": "Toggle dark mode"
+  },
+  "footer": {
+    "copyright": "© {year} Our Blog",
+    "home": "Home",
+    "blog": "Blog"
+  },
+  "blog": {
+    "latestPosts": "Latest Posts",
+    "noPosts": "No posts found.",
+    "searchPlaceholder": "Search posts...",
+    "clear": "✕ Clear",
+    "prev": "← Prev",
+    "next": "Next →",
+    "backToAll": "← Back to all posts",
+    "noContent": "This post doesn't have content yet. Check back later!",
+    "by": "By"
+  },
+  "preferences": {
+    "title": "Your Preferences",
+    "theme": "Theme"
+  },
+  "auth": {
+    "loginTitle": "Log In",
+    "signupTitle": "Sign Up",
+    "emailPlaceholder": "Email",
+    "usernamePlaceholder": "Username",
+    "passwordPlaceholder": "Password",
+    "loginButton": "Log In",
+    "signupButton": "Sign Up",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "hint": "Try: emilys / emilyspass",
+    "usernameRequired": "Username is required",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "invalidEmail": "Invalid email",
+    "minChars": "Min {count} characters",
+    "loginFailed": "Login failed",
+    "signupFailed": "Signup failed"
+  }
+}

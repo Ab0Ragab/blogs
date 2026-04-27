@@ -1,7 +1,6 @@
 import { ImageResponse } from "next/og";
 import { getPost } from "./page";
 
-// Image metadata
 export const size = {
   width: 1200,
   height: 630,
@@ -9,9 +8,9 @@ export const size = {
 
 export const contentType = "image/png";
 
-// Image generation
-export default async function Image({ params }: { params: { id: string } }) {
-  const post = await getPost(params.id);
+export default async function Image({ params }: { params: Promise<{ lang: string; id: string }> }) {
+  const { id } = await params;
+  const post = await getPost(id);
 
   return new ImageResponse(
     // ImageResponse JSX element

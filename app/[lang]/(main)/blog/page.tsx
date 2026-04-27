@@ -1,6 +1,8 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
 import UserPreferences from "@/components/user-preferences";
 import BlogFilters from "@/components/blog-filters";
 import BlogPagination from "@/components/blog-pagination";
@@ -17,11 +19,16 @@ const PER_PAGE = 5;
 
 export const metadata: Metadata = { title: "Our Blog" };
 
-export default function BlogPage({
+export default async function BlogPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ lang: Locale }>;
   searchParams: Promise<{ search?: string; from?: string; to?: string; page?: string }>;
 }) {
+  const { lang } = await params;
+  const dict = await getDictionary(lang);
+
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950">
       <div className="sticky top-0 z-10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200/60 dark:border-slate-700/60 pb-3">
@@ -32,11 +39,11 @@ export default function BlogPage({
 
       <div className="mx-auto max-w-4xl px-6 py-12 space-y-8">
         <Suspense fallback={<Skeleton />}>
-          <BlogContent searchParams={searchParams} />
+          <BlogContent searchParams={searchParams} lang={lang} />
         </Suspense>
 
         <Suspense fallback={<Skeleton />}>
-          <UserPreferences />
+          <UserPreferences lang={lang} />
         </Suspense>
       </div>
     </div>
@@ -45,11 +52,14 @@ export default function BlogPage({
 
 async function BlogContent({
   searchParams,
+  lang,
 }: {
   searchParams: Promise<{ search?: string; from?: string; to?: string; page?: string }>;
+  lang: Locale;
 }) {
   const { search = "", from = "", to = "", page = "1" } = await searchParams;
   const currentPage = Math.max(1, Number(page));
+  const dict = await getDictionary(lang);
 
   const res = await fetch(process.env.NEXT_PUBLIC_BLOG_API_URL!);
   let posts: Post[] = await res.json();
@@ -65,14 +75,14 @@ async function BlogContent({
 
   return (
     <section className="space-y-6">
-      <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Latest Posts</h2>
+      <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-200">{dict.blog.latestPosts}</h2>
 
       {paginated.length === 0 ? (
-        <p className="text-center text-slate-500 dark:text-slate-400 py-8">No posts found.</p>
+        <p className="text-center text-slate-500 dark:text-slate-400 py-8">{dict.blog.noPosts}</p>
       ) : (
         <div className="grid gap-4">
           {paginated.map((post, i) => (
-            <Link key={post.id} href={`/blog/${post.id}`}>
+            <Link key={post.id} href={`/${lang}/blog/${post.id}`}>
               <article className="group rounded-2xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 p-6 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
                 <div className="flex items-start gap-4">
                   <span className="shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-500 text-white text-sm font-bold shadow-md">
@@ -86,7 +96,7 @@ async function BlogContent({
                       <CopyButton text={post.title} />
                     </div>
                     <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                      By <span className="font-medium text-slate-700 dark:text-slate-300">{post.author}</span> · {post.date}
+                      {dict.blog.by} <span className="font-medium text-slate-700 dark:text-slate-300">{post.author}</span> · {post.date}
                     </p>
                   </div>
                 </div>
