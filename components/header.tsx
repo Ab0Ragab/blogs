@@ -1,18 +1,30 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { useI18n } from "@/i18n/context";
 import type { Locale } from "@/i18n/config";
 
-export default function Header({ initialDark = false, lang }: { initialDark?: boolean; lang: Locale }) {
+export default function Header({
+  initialDark = false,
+  lang,
+}: {
+  initialDark?: boolean;
+  lang: Locale;
+}) {
   const { authenticated, email, logout, ready } = useAuth();
   const { dict } = useI18n();
   const router = useRouter();
   const pathname = usePathname();
   const [dark, setDark] = useState(initialDark);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setMounted(true));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   const toggleTheme = useCallback(async () => {
     const next = !dark;
@@ -49,10 +61,16 @@ export default function Header({ initialDark = false, lang }: { initialDark?: bo
           {dict.header.brand}
         </Link>
         <nav className="flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
-          <Link href={`/${lang}`} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+          <Link
+            href={`/${lang}`}
+            className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+          >
             {dict.header.home}
           </Link>
-          <Link href={`/${lang}/blog`} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+          <Link
+            href={`/${lang}/blog`}
+            className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+          >
             {dict.header.blog}
           </Link>
           <button
@@ -69,29 +87,36 @@ export default function Header({ initialDark = false, lang }: { initialDark?: bo
           >
             {dark ? "☀️" : "🌙"}
           </button>
-          {ready && (authenticated ? (
-            <>
-              <span>{email}</span>
-              <button
-                onClick={handleLogout}
-                className="text-red-500 hover:text-red-600 font-medium transition-colors cursor-pointer"
-              >
-                {dict.header.logout}
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href={`/${lang}/login`} className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-                {dict.header.login}
-              </Link>
-              <Link
-                href={`/${lang}/signup`}
-                className="rounded-full bg-linear-to-r from-indigo-600 to-purple-600 px-4 py-1.5 text-white hover:brightness-110 transition-all"
-              >
-                {dict.header.signup}
-              </Link>
-            </>
-          ))}
+          <div suppressHydrationWarning className="flex items-center gap-3">
+            {!mounted ? (
+              <div className="h-6 w-24 rounded bg-slate-200/70 dark:bg-slate-700/70" />
+            ) : ready && authenticated ? (
+              <>
+                <span>{email}</span>
+                <button
+                  onClick={handleLogout}
+                  className="text-red-500 hover:text-red-600 font-medium transition-colors cursor-pointer"
+                >
+                  {dict.header.logout}
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href={`/${lang}/login`}
+                  className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                >
+                  {dict.header.login}
+                </Link>
+                <Link
+                  href={`/${lang}/signup`}
+                  className="rounded-full bg-linear-to-r from-indigo-600 to-purple-600 px-4 py-1.5 text-white hover:brightness-110 transition-all"
+                >
+                  {dict.header.signup}
+                </Link>
+              </>
+            )}
+          </div>
         </nav>
       </div>
     </header>

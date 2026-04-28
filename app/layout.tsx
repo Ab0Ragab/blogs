@@ -17,6 +17,12 @@ export const metadata: Metadata = {
   title: "Home | Our Blog",
   description: "Discover stories, ideas, and insights on our blog.",
   icons: { icon: "/favicon.ico" },
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Our Blog",
+  },
 };
 
 const themeScript = `(function(){var m=document.cookie.match(/(?:^|; )${THEME_COOKIE}=([^;]*)/);if(m&&m[1]==="dark")document.documentElement.classList.add("dark")})()`;
@@ -34,8 +40,17 @@ export default function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <meta name="theme-color" content="#000000" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("/sw.js"))`,
+          }}
+        />
+      </body>
     </html>
   );
 }
