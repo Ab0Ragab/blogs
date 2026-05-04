@@ -51,6 +51,35 @@ export default function Header({
     router.push(`/${lang}`);
   }
 
+  const isActivePath = (href: string) =>
+    href === `/${lang}` ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
+
+  const navLinkClass = (href: string) =>
+    [
+      "rounded-md px-2.5 py-1 transition-colors",
+      isActivePath(href)
+        ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300"
+        : "hover:bg-slate-100 hover:text-indigo-600 dark:hover:bg-slate-800 dark:hover:text-indigo-400",
+    ].join(" ");
+
+  const authLinkClass = (href: string, variant: "plain" | "primary" = "plain") => {
+    const active = isActivePath(href);
+
+    if (variant === "primary") {
+      return [
+        "rounded-full bg-linear-to-r from-indigo-600 to-purple-600 px-4 py-1.5 text-white transition-all hover:brightness-110",
+        active ? "ring-2 ring-indigo-300 ring-offset-2 ring-offset-white dark:ring-indigo-500 dark:ring-offset-slate-900" : "",
+      ].join(" ");
+    }
+
+    return [
+      "rounded-md px-2.5 py-1 transition-colors",
+      active
+        ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300"
+        : "hover:bg-slate-100 hover:text-indigo-600 dark:hover:bg-slate-800 dark:hover:text-indigo-400",
+    ].join(" ");
+  };
+
   return (
     <header className="sticky top-0 z-10 backdrop-blur-md bg-white/70 dark:bg-slate-900/70 border-b border-slate-200 dark:border-slate-800">
       <div className="mx-auto max-w-4xl flex items-center justify-between px-6 py-4">
@@ -63,13 +92,15 @@ export default function Header({
         <nav className="flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
           <Link
             href={`/${lang}`}
-            className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+            className={navLinkClass(`/${lang}`)}
+            aria-current={isActivePath(`/${lang}`) ? "page" : undefined}
           >
             {dict.header.home}
           </Link>
           <Link
             href={`/${lang}/blog`}
-            className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+            className={navLinkClass(`/${lang}/blog`)}
+            aria-current={isActivePath(`/${lang}/blog`) ? "page" : undefined}
           >
             {dict.header.blog}
           </Link>
@@ -104,13 +135,15 @@ export default function Header({
               <>
                 <Link
                   href={`/${lang}/login`}
-                  className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                  className={authLinkClass(`/${lang}/login`)}
+                  aria-current={isActivePath(`/${lang}/login`) ? "page" : undefined}
                 >
                   {dict.header.login}
                 </Link>
                 <Link
                   href={`/${lang}/signup`}
-                  className="rounded-full bg-linear-to-r from-indigo-600 to-purple-600 px-4 py-1.5 text-white hover:brightness-110 transition-all"
+                  className={authLinkClass(`/${lang}/signup`, "primary")}
+                  aria-current={isActivePath(`/${lang}/signup`) ? "page" : undefined}
                 >
                   {dict.header.signup}
                 </Link>
