@@ -3,17 +3,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cacheLife, cacheTag } from "next/cache";
 import type { Locale } from "@/i18n/config";
-import { getDictionary } from "@/i18n/get-dictionary";
-import Breadcrumbs from "@/components/breadcrumbs";
-
-interface Post {
-  id: number;
-  title: string;
-  author: string;
-  date: string;
-  content: string;
-  description: string;
-}
+import BlogPostDetail from "@/components/blog-post-detail";
+import type { BlogPost } from "@/lib/blog-store";
 
 export async function generateMetadata({
   params,
@@ -22,6 +13,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   const post = await getPost(id);
+
   return {
     title: post?.title ?? "Post not found",
     description: post?.description ?? "",
@@ -57,9 +49,9 @@ export default function BlogPostPage({
 
 function PostSkeleton() {
   return (
-    <div className="rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700/60 p-8 sm:p-10 animate-pulse space-y-4">
+    <div className="space-y-4 rounded-2xl border border-slate-200/60 bg-white/80 p-8 animate-pulse dark:border-slate-700/60 dark:bg-slate-800/80 sm:p-10">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700" />
+        <div className="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700" />
         <div className="h-4 w-40 rounded bg-slate-200 dark:bg-slate-700" />
       </div>
       <div className="h-8 w-3/4 rounded bg-slate-200 dark:bg-slate-700" />
@@ -75,46 +67,20 @@ async function PostContent({
   params: Promise<{ lang: Locale; id: string }>;
 }) {
   const { lang, id } = await params;
-  const dict = await getDictionary(lang);
   const post = await getPost(id);
   if (!post) notFound();
 
-  return (
-    <>
-      <Breadcrumbs labels={{ [`/${lang}/blog/${id}`]: post.title }} />
-
-      <article className="rounded-2xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 p-8 sm:p-10 shadow-sm">
-        <div className="flex items-center gap-3 mb-6">
-          <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-linear-to-br from-indigo-500 to-purple-500 text-white text-sm font-bold shadow-md">
-            {post.author.charAt(0)}
-          </span>
-          <div className="text-sm text-slate-500 dark:text-slate-400">
-            <span className="font-medium text-slate-700 dark:text-slate-300">
-              {post.author}
-            </span>
-            <span className="mx-2">·</span>
-            {post.date}
-          </div>
-        </div>
-
-        <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white leading-tight mb-8">
-          {post.title}
-        </h1>
-
-        <div className="prose prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 leading-relaxed">
-          {post.content || dict.blog.noContent}
-        </div>
-      </article>
-    </>
-  );
+  return <BlogPostDetail initialPost={post} lang={lang} />;
 }
 
-export async function getPost(id: string): Promise<Post | undefined> {
+export async function getPost(id: string): Promise<BlogPost | undefined> {
   "use cache";
   cacheLife("hours");
   cacheTag("posts");
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_BLOG_API_URL}/${id}`);
-  const post: Post = await res.json();
+  if (!res.ok) return undefined;
+
+  const post: BlogPost = await res.json();
   return post;
 }

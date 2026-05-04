@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Blogs
+
+A localized Next.js blog app with server-rendered routes and a Zustand-backed client store for blog browsing, filtering, pagination, and post detail state.
+
+## Tech Stack
+
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Zustand
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
+
+```bash
+npm install
+```
+
+Create a `.env` file with the blog API endpoint:
+
+```bash
+NEXT_PUBLIC_BLOG_API_URL=https://your-blog-api.example.com/posts
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+```
 
-## Learn More
+## Blog State Flow
 
-To learn more about Next.js, take a look at the following resources:
+The blog pages fetch initial data on the server, then pass it into client components that hydrate the Zustand store.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `lib/blog-store.ts` defines the blog post types, filters, active post, and store actions.
+- `components/blog-list.tsx` renders the filtered and paginated list from the store.
+- `components/blog-filters.tsx` keeps URL search params and store filters in sync.
+- `components/blog-post-detail.tsx` renders a single post and stores it as the active post.
+- `app/[lang]/(main)/blog/page.tsx` fetches the initial list.
+- `app/[lang]/(main)/blog/[id]/page.tsx` fetches a single post and metadata.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Local Next.js Docs
 
-## Deploy on Vercel
+This project uses a newer Next.js version with changed APIs. Before changing route conventions, async route props, cache APIs, or server/client component behavior, read the relevant docs in:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```text
+node_modules/next/dist/docs/
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Verification
+
+Before handing off changes, run:
+
+```bash
+npm run lint
+npm run build
+```
