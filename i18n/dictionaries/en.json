@@ -13,6 +13,15 @@
     "logout": "Logout",
     "toggleDark": "Toggle dark mode"
   },
+  "breadcrumb": {
+    "label": "Breadcrumb",
+    "home": "Home",
+    "blog": "Blog",
+    "login": "Log in",
+    "signup": "Sign up",
+    "offline": "Offline",
+    "post": "Post {id}"
+  },
   "footer": {
     "copyright": "© {year} Our Blog",
     "home": "Home",
@@ -25,7 +34,6 @@
     "clear": "✕ Clear",
     "prev": "← Prev",
     "next": "Next →",
-    "backToAll": "← Back to all posts",
     "noContent": "This post doesn't have content yet. Check back later!",
     "by": "By"
   },

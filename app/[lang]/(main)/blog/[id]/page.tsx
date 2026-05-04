@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cacheLife, cacheTag } from "next/cache";
 import type { Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import Breadcrumbs from "@/components/breadcrumbs";
 
 interface Post {
   id: number;
@@ -69,7 +69,11 @@ function PostSkeleton() {
   );
 }
 
-async function PostContent({ params }: { params: Promise<{ lang: Locale; id: string }> }) {
+async function PostContent({
+  params,
+}: {
+  params: Promise<{ lang: Locale; id: string }>;
+}) {
   const { lang, id } = await params;
   const dict = await getDictionary(lang);
   const post = await getPost(id);
@@ -77,12 +81,7 @@ async function PostContent({ params }: { params: Promise<{ lang: Locale; id: str
 
   return (
     <>
-      <Link
-        href={`/${lang}/blog`}
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors mb-8"
-      >
-        {dict.blog.backToAll}
-      </Link>
+      <Breadcrumbs labels={{ [`/${lang}/blog/${id}`]: post.title }} />
 
       <article className="rounded-2xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200/60 dark:border-slate-700/60 p-8 sm:p-10 shadow-sm">
         <div className="flex items-center gap-3 mb-6">

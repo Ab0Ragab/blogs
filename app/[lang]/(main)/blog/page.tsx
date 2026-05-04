@@ -7,6 +7,7 @@ import UserPreferences from "@/components/user-preferences";
 import BlogFilters from "@/components/blog-filters";
 import BlogPagination from "@/components/blog-pagination";
 import CopyButton from "@/components/copy-button";
+import Breadcrumbs from "@/components/breadcrumbs";
 
 interface Post {
   id: number;
@@ -27,7 +28,6 @@ export default async function BlogPage({
   searchParams: Promise<{ search?: string; from?: string; to?: string; page?: string }>;
 }) {
   const { lang } = await params;
-  const dict = await getDictionary(lang);
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950">
@@ -38,6 +38,8 @@ export default async function BlogPage({
       </div>
 
       <div className="mx-auto max-w-4xl px-6 py-12 space-y-8">
+        <Breadcrumbs />
+
         <Suspense fallback={<Skeleton />}>
           <BlogContent searchParams={searchParams} lang={lang} />
         </Suspense>
